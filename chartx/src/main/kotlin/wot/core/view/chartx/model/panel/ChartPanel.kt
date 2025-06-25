@@ -3,7 +3,7 @@ package wot.core.view.chartx.model.panel
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
-import wot.core.view.chartx.axis.ChartAxis
+import wot.core.view.chartx.axis.BaseAxis
 import wot.core.view.chartx.axis.model.AxisPosition
 import wot.core.view.chartx.axis.model.AxisSide
 import wot.core.view.chartx.log.Logcat
@@ -31,7 +31,7 @@ data class ChartPanel(val viewport: ChartViewport) {
 
     private val dataRendererList by lazy { mutableListOf<BaseDataRenderer>() } // 数据渲染器列表
 
-    private val axisList by lazy { mutableListOf<ChartAxis>() }
+    private val axisList by lazy { mutableListOf<BaseAxis>() }
 
     /**
      * 设置面板区域边界
@@ -66,7 +66,7 @@ data class ChartPanel(val viewport: ChartViewport) {
      */
     fun prepareToDraw() {
         dataRendererList.forEach { renderer ->
-            viewport.updateMaxIndex(renderer.lastIndex())   // 更新最大索引
+            viewport.updateMaxIndex(renderer.lastIndex)   // 更新最大索引
             renderer.prepareToDraw(viewport, contentBounds) // 渲染器的准备工作
         }
         axisList.forEach { it.prepareToDraw() } // 坐标的准备工作
@@ -83,7 +83,7 @@ data class ChartPanel(val viewport: ChartViewport) {
     /**
      * 添加坐标轴，如果已有相同 axisSide + axisPosition，则忽略。
      */
-    fun addAxis(vararg chartAxes: ChartAxis) {
+    fun addAxis(vararg chartAxes: BaseAxis) {
         chartAxes.forEach { axis ->
             val exists = axisList.any {
                 it.axisSide == axis.axisSide && it.axisPosition == axis.axisPosition
@@ -99,7 +99,7 @@ data class ChartPanel(val viewport: ChartViewport) {
     /**
      * 添加坐标轴，如果已有相同 axisSide + axisPosition，则替换。
      */
-    fun addOrReplaceAxis(axis: ChartAxis) {
+    fun addOrReplaceAxis(axis: BaseAxis) {
         val index = axisList.indexOfFirst {
             it.axisSide == axis.axisSide && it.axisPosition == axis.axisPosition
         }
@@ -127,7 +127,7 @@ data class ChartPanel(val viewport: ChartViewport) {
         val renderer = dataRendererList.getOrNull(dataIndex) ?: return
         renderer.setNewData(entryList)
 
-        viewport.updateMaxIndex(renderer.lastIndex()) // 更新最大索引
+        viewport.updateMaxIndex(renderer.lastIndex) // 更新最大索引
         renderer.prepareToDraw(viewport, contentBounds)// 渲染器的准备工作
         axisList.forEach { it.prepareToDraw() } // 坐标的准备工作
     }

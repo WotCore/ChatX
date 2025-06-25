@@ -6,11 +6,13 @@ import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import wot.core.view.chartx.log.Logcat
 import wot.core.view.chartx.model.data.ChartEntry
 import wot.core.view.chartx.model.panel.ChartPanel
 import wot.core.view.chartx.model.viewport.ChartViewport
 import wot.core.view.chartx.touch.GestureHandler
 import wot.core.view.chartx.touch.OnTouchListener
+import kotlin.math.abs
 
 /**
  * 图表基类
@@ -110,8 +112,12 @@ abstract class BaseChartView @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
+        Logcat.i("$viewport")
         panelList.forEach { it.startDraw(canvas, paint) } // 画板绘制内容
     }
+
+
+    // ========== OnTouchListener =========
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
         return gestureHandler.handleTouchEvent(event)
@@ -123,8 +129,8 @@ abstract class BaseChartView @JvmOverloads constructor(
 
     override fun onMove(x: Float, y: Float, deltaX: Float, deltaY: Float) {
         accumulatedDeltaX += deltaX
-        val pointWidth = viewport.getPointRealWidth()
-        if (kotlin.math.abs(accumulatedDeltaX) >= pointWidth) {
+        val pointWidth = viewport.pointRealWidth
+        if (abs(accumulatedDeltaX) >= pointWidth) {
             val moveCount = (accumulatedDeltaX / pointWidth).toInt() // 计算移动的整点数
             val moveDistance = moveCount * pointWidth // 计算实际移动的距离（整点数 × 点宽度）
             viewport.panVisibleRange(moveCount)

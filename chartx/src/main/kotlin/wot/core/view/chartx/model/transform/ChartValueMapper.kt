@@ -45,6 +45,10 @@ class ChartValueMapper {
 
     /**
      * 坐标像素映射成数据值
+     *
+     * ===================== ⚠ 注意 =====================
+     * [buildMatrix] 对 x 轴进行了 [contentRect.left] 偏移，所以传入的像素坐标必须是已加偏移的值！否则会导致坐标映射错误。
+     * =================================================
      */
     fun toData(pixels: FloatArray) {
         valueToPxMatrix.invert(pxToValueMatrix)

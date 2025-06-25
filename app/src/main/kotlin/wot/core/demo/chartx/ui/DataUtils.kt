@@ -26,7 +26,7 @@ object DataUtils {
     }
 
     fun chatData(
-        times: Int = 180,
+        times: Int = 80,
         min: Float = 9.5F,
         max: Float = 10.5F,
     ): MutableList<ChartEntry> {
@@ -37,6 +37,18 @@ object DataUtils {
             val yValue = Random.nextFloat() * (max - min) + min
             dataList.add(ChartEntry(xValue, yValue))
             calendar.add(Calendar.DAY_OF_MONTH, 1)
+        }
+        return dataList
+    }
+
+    fun chatData1(
+        times: Int = 10,
+    ): MutableList<ChartEntry> {
+        val dataList = mutableListOf<ChartEntry>()
+        for (i in 0 until times) {
+            val xValue = "$i"
+            val yValue = i.toFloat()
+            dataList.add(ChartEntry(xValue, yValue))
         }
         return dataList
     }

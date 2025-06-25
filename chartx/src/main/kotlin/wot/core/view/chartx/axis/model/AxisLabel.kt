@@ -7,9 +7,12 @@ package wot.core.view.chartx.axis.model
  * @date : 2025/5/29
  */
 data class AxisLabel(
-    val ratio: Float,
+    val axisRatio: Float,
     private val manualText: String? = null // 手动设置, 将不会结合 ratio 重新计算值
 ) {
+
+    var ratio: Float = axisRatio
+        private set
 
     var text: String? = null
         get() {
@@ -20,13 +23,6 @@ data class AxisLabel(
         }
 
     /**
-     * 是否需要动态计算 [text] 的值
-     */
-    fun isNeedCalculateText(): Boolean {
-        return manualText == null
-    }
-
-    /**
      * x 坐标
      */
     var x: Float = 0F
@@ -35,4 +31,16 @@ data class AxisLabel(
      * y 坐标
      */
     var y: Float = 0F
+
+    init {
+        // 修正 ratio，保证在 0..1
+        this.ratio = ratio.coerceIn(0f, 1f)
+    }
+
+    /**
+     * 是否需要动态计算 [text] 的值
+     */
+    fun isNeedCalculateText(): Boolean {
+        return manualText == null
+    }
 }

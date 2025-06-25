@@ -3,7 +3,8 @@ package wot.core.view.chartx
 import android.content.Context
 import android.graphics.Color
 import android.util.AttributeSet
-import wot.core.view.chartx.axis.ChartAxis
+import wot.core.view.chartx.axis.XAxis
+import wot.core.view.chartx.axis.YAxis
 import wot.core.view.chartx.axis.formatter.XAxisLabelFormatter
 import wot.core.view.chartx.axis.model.AxisLabel
 import wot.core.view.chartx.axis.model.AxisLine
@@ -29,13 +30,13 @@ class SampleChartView(context: Context, attrs: AttributeSet? = null) :
                 val xRenderers = LineDataRenderer()
                 addDataRenderers(xRenderers, LineDataRenderer(Color.RED))
                 addAxis(
-                    ChartAxis(AxisSide.LEFT, AxisPosition.OUTSIDE, 60F).apply {
+                    YAxis(AxisSide.LEFT, AxisPosition.OUTSIDE, 60F).apply {
                         addLabels(
-                            AxisLabel(0f, "10"),
-                            AxisLabel(0.25F, "20"),
-                            AxisLabel(0.5F, "30"),
-                            AxisLabel(0.75F, "40"),
-                            AxisLabel(1F, "50")
+                            AxisLabel(0f),
+                            AxisLabel(0.25F),
+                            AxisLabel(0.5F),
+                            AxisLabel(0.75F),
+                            AxisLabel(1F)
                         )
 
                         addLines(
@@ -46,7 +47,7 @@ class SampleChartView(context: Context, attrs: AttributeSet? = null) :
                             AxisLine(1F)
                         )
                     },
-                    ChartAxis(AxisSide.BOTTOM, AxisPosition.OUTSIDE, 60F).apply {
+                    XAxis(AxisSide.BOTTOM, AxisPosition.OUTSIDE, 56F).apply {
                         addLabels(
                             AxisLabel(0f),
                             AxisLabel(0.25F),
@@ -64,7 +65,7 @@ class SampleChartView(context: Context, attrs: AttributeSet? = null) :
                         )
 
                         formatter = object : XAxisLabelFormatter {
-                            override fun provideDataRenderer(): BaseDataRenderer {
+                            override fun provideRenderer(): BaseDataRenderer {
                                 return xRenderers
                             }
 
@@ -74,83 +75,7 @@ class SampleChartView(context: Context, attrs: AttributeSet? = null) :
                                 return value
                             }
                         }
-                    },
-//                    ChartAxis(AxisSide.LEFT, AxisPosition.INSIDE, 60F).apply {
-//                        addLabels(
-//                            AxisLabel(0f, "10"),
-//                            AxisLabel(0.25F, "20"),
-//                            AxisLabel(0.5F, "30"),
-//                            AxisLabel(0.75F, "40"),
-//                            AxisLabel(1F, "50")
-//                        )
-//                    },
-//                    ChartAxis(AxisSide.TOP, AxisPosition.OUTSIDE, 60F).apply {
-//                        addLabels(
-//                            AxisLabel(0f, "10"),
-//                            AxisLabel(0.25F, "20"),
-//                            AxisLabel(0.5F, "30"),
-//                            AxisLabel(0.75F, "40"),
-//                            AxisLabel(1F, "50")
-//                        )
-//                    }, ChartAxis(AxisSide.TOP, AxisPosition.INSIDE, 60F).apply {
-//                        addLabels(
-//                            AxisLabel(0f, "10"),
-//                            AxisLabel(0.25F, "20"),
-//                            AxisLabel(0.5F, "30"),
-//                            AxisLabel(0.75F, "40"),
-//                            AxisLabel(1F, "50")
-//                        )
-//                    },
-//                    ChartAxis(AxisSide.RIGHT, AxisPosition.OUTSIDE, 120F).apply {
-//                        addLabels(
-//                            AxisLabel(0f),
-//                            AxisLabel(0.25F),
-//                            AxisLabel(0.5F),
-//                            AxisLabel(0.75F),
-//                            AxisLabel(1F)
-//                        )
-//                        formatter = object : AxisLabelFormatter {
-//
-//                            override fun format(
-//                                side: AxisSide, axisPosition: AxisPosition, value: Float
-//                            ): String {
-//                                return "$value"
-//                            }
-//                        }
-//                    }, ChartAxis(AxisSide.RIGHT, AxisPosition.INSIDE, 120F).apply {
-//                        addLabels(
-//                            AxisLabel(0f),
-//                            AxisLabel(0.25F),
-//                            AxisLabel(0.5F),
-//                            AxisLabel(0.75F),
-//                            AxisLabel(1F)
-//                        )
-//                        formatter = object : AxisLabelFormatter {
-//
-//                            override fun format(
-//                                side: AxisSide, axisPosition: AxisPosition, value: Float
-//                            ): String {
-//                                return "$value"
-//                            }
-//                        }
-//                    },
-//                    ChartAxis(AxisSide.BOTTOM, AxisPosition.INSIDE, 60F).apply {
-//                        addLabels(
-//                            AxisLabel(0f),
-//                            AxisLabel(0.25F),
-//                            AxisLabel(0.5F),
-//                            AxisLabel(0.75F),
-//                            AxisLabel(1F)
-//                        )
-//                        formatter = object : AxisLabelFormatter {
-//
-//                            override fun format(
-//                                side: AxisSide, axisPosition: AxisPosition, value: Float
-//                            ): String {
-//                                return "$value"
-//                            }
-//                        }
-//                    }
+                    }
                 )
             }
         )

@@ -10,15 +10,25 @@ import android.graphics.PointF
  */
 data class AxisLine(val ratio: Float) {
 
+    /**
+     * 起始点
+     */
     val startPoint by lazy { PointF() }
 
+    /**
+     * 结束点
+     */
     val endPoint by lazy { PointF() }
 
-    fun startX() = startPoint.x
+    val startX: Float
+        get() = startPoint.x
 
-    fun startY() = startPoint.y
+    val startY: Float
+        get() = startPoint.y
 
-    fun endX() = endPoint.x
+    val endX: Float
+        get() = endPoint.x
 
-    fun endY() = endPoint.y
+    val endY: Float
+        get() = endPoint.y
 }

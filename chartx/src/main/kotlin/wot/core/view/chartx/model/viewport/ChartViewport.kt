@@ -1,6 +1,6 @@
 package wot.core.view.chartx.model.viewport
 
-import wot.core.view.chartx.log.Logcat
+import kotlin.math.roundToInt
 
 /**
  * 图表 视窗
@@ -13,12 +13,13 @@ class ChartViewport {
     /**
      * 点的最大宽度
      */
-    var pointMaxWidth: Float = 20F
+    private var pointMaxWidth: Float = 100F
 
     /**
-     * 最大可见点数
+     * 一页可以展示的点数
      */
-    var maxVisiblePoints: Int = 0
+    var pageSize: Int = 0
+        private set
     var maxIndex: Int = 0 // 最大索引
         private set
     var startIndex: Int = 0 // 起始索引
@@ -30,6 +31,12 @@ class ChartViewport {
      * 图表内容宽
      */
     private var contentWidth: Float = 0F
+
+    /**
+     * 点的真实宽度
+     */
+    val pointRealWidth: Float
+        get() = contentWidth / (pageSize - 1)
 
     fun setContentWidth(contentWidth: Float) {
         this.contentWidth = contentWidth
@@ -57,13 +64,6 @@ class ChartViewport {
     }
 
     /**
-     * 获取点的真实宽度
-     */
-    fun getPointRealWidth(): Float {
-        return pointMaxWidth
-    }
-
-    /**
      * 根据用户在图表中的水平滑动距离，平移当前可见的数据范围。
      *
      * - 向右滑动（moveX > 0）：查看更早的数据，前移数据窗口。
@@ -88,7 +88,6 @@ class ChartViewport {
      * @param moveCount 移动点数
      */
     fun panVisibleRange(moveCount: Int) {
-        Logcat.d("$this -> moveCount: $moveCount, maxIndex: $maxIndex, maxVisiblePoints: $maxVisiblePoints")
         if (moveCount > 0) {
             // 向右滑动，显示更早的数据
             startIndex = (startIndex - moveCount).coerceAtLeast(0)
@@ -98,14 +97,13 @@ class ChartViewport {
             endIndex = (endIndex - moveCount).coerceAtMost(maxIndex)
             calcStartIndex()
         }
-        Logcat.i("$this -> startIndex: $startIndex, endIndex: $endIndex")
     }
 
     /**
      * 计算最大可见点数
      */
     private fun calcMaxVisiblePoints() {
-        maxVisiblePoints = (contentWidth / pointMaxWidth).toInt()
+        pageSize = (contentWidth / pointMaxWidth).roundToInt()
     }
 
     /**
@@ -123,7 +121,7 @@ class ChartViewport {
      * 计算开始索引
      */
     private fun calcStartIndex() {
-        startIndex = endIndex - maxVisiblePoints + 1
+        startIndex = endIndex - pageSize + 1
         // 限制边界
         if (startIndex < 0) {
             startIndex = 0
@@ -136,12 +134,16 @@ class ChartViewport {
      * 计算结束索引
      */
     private fun calcEndIndex() {
-        endIndex = startIndex + maxVisiblePoints - 1
+        endIndex = startIndex + pageSize - 1
         // 限制边界
         if (endIndex < 0) {
             endIndex = 0
         } else if (endIndex > maxIndex) {
             endIndex = maxIndex
         }
+    }
+
+    override fun toString(): String {
+        return "ChartViewport(pageSize=$pageSize, maxIndex=$maxIndex, startIndex=$startIndex, endIndex=$endIndex, contentWidth=$contentWidth, pointMaxWidth=$pointMaxWidth, pointRealWidth=$pointRealWidth)"
     }
 }

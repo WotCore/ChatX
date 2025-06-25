@@ -10,6 +10,10 @@ android {
     namespace = "wot.core.view.chartx"
     compileSdk = AndroidConfig.compileSdk
 
+    buildFeatures {
+        buildConfig = true
+    }
+
     defaultConfig {
         minSdk = AndroidConfig.minSdk
 

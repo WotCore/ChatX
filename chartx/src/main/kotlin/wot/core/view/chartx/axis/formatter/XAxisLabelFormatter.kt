@@ -16,7 +16,7 @@ interface XAxisLabelFormatter : IAxisLabelFormatter {
      * 提供数据渲染器
      * 1. 需要提供数据渲染器, 才知道显示的是哪份数据的值, 才知道渲染的数据是什么
      */
-    fun provideDataRenderer(): BaseDataRenderer
+    fun provideRenderer(): BaseDataRenderer
 
     /**
      * 格式化轴值

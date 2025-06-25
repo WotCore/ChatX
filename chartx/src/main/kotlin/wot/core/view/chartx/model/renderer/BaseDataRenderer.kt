@@ -3,7 +3,6 @@ package wot.core.view.chartx.model.renderer
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
-import wot.core.view.chartx.log.Logcat
 import wot.core.view.chartx.model.data.ChartDataSet
 import wot.core.view.chartx.model.data.ChartEntry
 import wot.core.view.chartx.model.transform.ChartValueMapper
@@ -34,6 +33,12 @@ abstract class BaseDataRenderer {
     private val dataSet by lazy { ChartDataSet() }
     private val valueMapper by lazy { ChartValueMapper() }
 
+    val entryCount: Int
+        get() = dataSet.entryCount()
+
+    val lastIndex: Int
+        get() = dataSet.lastIndex()
+
     /**
      * 绘制
      * @param canvas 画布
@@ -48,8 +53,6 @@ abstract class BaseDataRenderer {
      */
     fun entryAt(index: Int) = dataSet.entryAt(index)
 
-    fun lastIndex() = dataSet.lastIndex()
-
     fun setNewData(newEntries: List<ChartEntry>) {
         dataSet.setNewData(newEntries)
     }
@@ -59,7 +62,7 @@ abstract class BaseDataRenderer {
      */
     fun prepareToDraw(viewport: ChartViewport, contentRect: RectF) {
         val startIndex = viewport.startIndex
-        val pointWidth = viewport.pointMaxWidth
+        val pointWidth = viewport.pointRealWidth
         val yMin = dataSet.yMin
         val yRange = dataSet.yRange
         valueMapper.buildMatrix(contentRect, yMin, yRange, startIndex, pointWidth) // 坐标映射
@@ -78,14 +81,14 @@ abstract class BaseDataRenderer {
     /**
      * 值数据映射成像素数据
      */
-    fun toPixels(data: FloatArray) {
+    fun dataToPixels(data: FloatArray) {
         valueMapper.toPixels(data)
     }
 
     /**
      * 坐标像素映射成数据值
      */
-    fun toData(pixels: FloatArray) {
+    fun pixelsToData(pixels: FloatArray) {
         valueMapper.toData(pixels)
     }
 
@@ -95,6 +98,5 @@ abstract class BaseDataRenderer {
     private fun calcRenderRange(panelStartIndex: Int, panelEndIndex: Int, entryMaxIndex: Int) {
         this.startIndex = max(panelStartIndex, 0)
         this.endIndex = min(panelEndIndex, entryMaxIndex)
-        Logcat.i("startIndex = $startIndex, endIndex = $endIndex")
     }
 }
